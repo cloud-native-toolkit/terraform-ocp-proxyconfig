@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: https-proxy-remove
+  namespace: kube-system
+  labels:
+    tier: management
+    app: https-proxy-remove
+spec:
+  selector:
+    matchLabels:
+      name: https-proxy-remove
+  template:
+    metadata:
+      labels:
+        name: https-proxy-remove
+    spec:
+      initContainers:
+        - command: ["/bin/sh", "-c"]
+          args:
+            - >
+              rm -rf /host/etc/sysconfig/${crio-config-file}
+          image: ${ocp_release_dev_image}
+          imagePullPolicy: IfNotPresent
+          name: crio-proxy-setup
+          resources: {}
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: host
+              mountPath: /host
+      containers:
+        - resources:
+            requests:
+              cpu: 10m
+          image: ${ocp_release_dev_image}
+          command: ["/bin/sh", "-c"]
+          name: pause
+          args:
+            - >
+              while true; do
+                sleep 100000;
+              done
+      tolerations:
+      - operator: Exists
+      volumes:
+        - name: host
+          hostPath:
+            path: /
+            type: Directory

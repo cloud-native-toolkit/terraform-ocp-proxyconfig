@@ -1,4 +1,3 @@
-
 # Resource Group Variables
 variable "resource_group_name" {
   type        = string
@@ -7,17 +6,13 @@ variable "resource_group_name" {
 
 variable "ibmcloud_api_key" {
   type        = string
-  description = "The api key for IBM Cloud access"
+  description = "The IBM Cloud api token"
+  default     = ""
 }
 
 variable "region" {
   type        = string
   description = "Region for VLANs defined in private_vlan_number and public_vlan_number."
-}
-
-variable "namespace" {
-  type        = string
-  description = "Namespace for tools"
 }
 
 variable "cluster_name" {
@@ -26,14 +21,9 @@ variable "cluster_name" {
   default     = ""
 }
 
-variable "cluster_type" {
-  type        = string
-  description = "The type of cluster that should be created (openshift or kubernetes)"
-}
-
-variable "cluster_exists" {
-  type        = string
-  description = "Flag indicating if the cluster already exists (true or false)"
+variable "roks_cluster" {
+  type        = bool
+  description = "Flag indicating that this is a ROKS cluster"
   default     = "true"
 }
 
@@ -46,5 +36,39 @@ variable "name_prefix" {
 variable "vpc_cluster" {
   type        = bool
   description = "Flag indicating that this is a vpc cluster"
-  default     = false
+  default     = true
 }
+
+variable "vpc_public_gateway" {
+  type        = string
+  description = "Flag indicating the public gateway should be created"
+  default     = "true"
+}
+
+variable "vpc_subnet_count" {
+  type        = number
+  description = "The number of subnets to create for the VPC instance"
+  default     = 0
+}
+
+variable "vpc_subnets" {
+  type        = string
+  description = "JSON representation of list of object, e.g. [{\"label\"=\"default\"}]"
+  default     = "[]"
+}
+
+variable "worker_count" {
+  type        = number
+  default     = 2
+}
+
+variable "ocp_version" {
+  type        = string
+  default     = "4.8"
+}
+
+variable "vpc_subnet_label" {
+  type        = string
+  default     = "cluster"
+}
+

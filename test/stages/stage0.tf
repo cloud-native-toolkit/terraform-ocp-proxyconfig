@@ -1,2 +1,23 @@
 terraform {
+  required_version = ">= 0.15"
+
+  required_providers {
+    ibm = {
+      source = "ibm-cloud/ibm"
+    }
+    random = {
+      source = "hashicorp/random"
+      version = ">= 3.3"
+    }
+  }
+}
+
+locals {
+  name_prefix_test = "${var.name_prefix}-${random_string.this.result}"
+}
+
+resource "random_string" "this" {
+  length = 6
+  special = false
+  upper = false
 }
